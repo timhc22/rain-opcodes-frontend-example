@@ -1,23 +1,65 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import React, {useState} from 'react';
+import { networks } from "./networks";
+import { isAfterBlockNumber } from "./opcodeExample";
 
 function App() {
+  const [currentAccount, setCurrentAccount] = useState(null);
+
+  const connectWalletHandler = async () => {
+    // @ts-ignore
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      console.log("No Web3 Wallet installed");
+    }
+
+    try {
+      const accounts = await ethereum.request({
+        method: 'eth_requestAccounts',
+        chainId: networks[0].config.chainId,
+      });
+      console.log(`Address ${accounts[0]} connected`);
+      setCurrentAccount(accounts[0]);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const runOpcodesExample = async () => {
+    // @ts-ignore
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      console.log("No Web3 Wallet installed");
+    }
+
+    try {
+      // const accounts = await ethereum.request({
+      //   method: 'eth_requestAccounts',
+      //   chainId: networks[0].config.chainId,
+      // });
+      // console.log(`Address ${accounts[0]} connected`);
+      // setCurrentAccount(accounts[0]);
+
+      // TODO ADD FUNCTIONALITY FOR CALLING THE SMART CONTRACT WITH THE OPCODE
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={connectWalletHandler}>
+          Connect
+        </button>
+
+        <button onClick={runOpcodesExample}>
+          Run Opcodes Example
+        </button>
       </header>
     </div>
   );
